@@ -1,0 +1,4 @@
+defs/screeps.json
+.idea
+# Project exclude paths
+/node_modules/
