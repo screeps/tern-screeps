@@ -202,7 +202,17 @@ var def_screeps = {
                     "!type": "fn(directions: [number]) -> number"
                 }
             }
-        }
+        },
+        Power: {
+            level: {
+                "!doc": "Current level of the power.",
+                "!type": "number"
+            },
+            cooldown: {
+                "!doc": "Cooldown ticks remaining, or undefined if the power creep is not spawned in the world.",
+                "!type": "number"
+            }
+        },
     },
     RoomObject: {
         "!type": "fn()",
@@ -510,6 +520,146 @@ _extend(def_screeps, {
                 "!doc": "Add one more available safe mode activation to a room controller. The creep has to be at adjacent square to the target room controller and have 1000 ghodium resource.\n\nArguments:\n* target - The target room controller.\n\nCPU cost: CONST",
                 "!type": "fn(target: +StructureController) -> number"
             }
+        })
+    },
+    PowerCreep: {
+        "!type": "fn()",
+        "!doc": "Power Creeps are immortal \"heroes\" that are tied to your account and can be respawned in any PowerSpawn after death.",
+        prototype: _extend({}, _docs.store, def_screeps.RoomObject.prototype, {
+            cancelOrder: {
+                "!doc": "Cancel the order given during the current game tick.\n\nArguments:\n* methodName - The name of a power creep's method to be cancelled.\n\nCPU cost:NONE",
+                "!type": "fn(methodName: string) -> number"
+            },
+            className: {
+                "!type": "string",
+                "!doc": "The power creep's class, one of the POWER_CLASS constants."
+            },
+            delete: {
+                "!doc": "Delete the power creep permanently from your account. It should NOT be spawned in the world. The creep is not deleted immediately, but a 24-hours delete timer is started instead (see deleteTime). You can cancel deletion by calling delete(true).",
+                "!type": "fn(cancel?: boolean) -> number"
+            },
+            deleteTime: {
+                "!type": "number",
+                "!doc": "A timestamp when this creep is marked to be permanently deleted from the account, or undefined otherwise.",
+            },
+            drop: {
+                "!doc": "Drop resource on the ground.\n\nArguments:\n* resourceType - One of the RESOURCE_* constants.\n* amount - The amount of resource units to be dropped.\n\nCPU cost: CONST",
+                "!type": "fn(resourceType: string, amount?: number) -> number"
+            },
+            enableRoom: {
+                "!doc": "Enable powers usage in this room.\n\nArguments:\n* controller - The room controller.\n\nCPU cost: CONST",
+                "!type": "fn(controller: +StructureController) -> number"
+            },
+            hits: {
+                "!type": "number",
+                "!doc": "The current amount of hit points of the power creep.",
+            },
+            hitsMax: {
+                "!type": "number",
+                "!doc": "The maximum amount of hit points of the power creep.",
+            },
+            id: {
+                "!type": "string",
+                "!doc": "A unique object identificator. You can use `Game.getObjectById` method to retrieve an object instance by its `id`.",
+            },
+            level: {
+                "!type": "number",
+                "!doc": "The power creep's level.",
+            },
+            memory: {
+                "!doc": "A shorthand to `Memory.powerCreeps[creep.name]`. You can use it for quick access the power creep’s specific memory data object.",
+            },
+            move: {
+                "!doc": "Move the power creep one square in the specified direction.\n\nArguments:\n* direction - One of the direction constants.\n\nCPU cost: CONST",
+                "!type": "fn(direction: number) -> number"
+            },
+            moveByPath: {
+                "!doc": "Move the power creep using the specified predefined path.\n\nArguments:\n* path - A path value as returned from `Room.findPath`, `RoomPosition.findPathTo`, or `PathFinder.search` methods. Both array form and serialized string form are accepted.\n\nCPU cost: CONST",
+                "!type": "fn(path: Path) -> number"
+            },
+            moveTo: {
+                "!doc": "Syntax:\nmoveTo(x, y, [opts])\nmoveTo(target, [opts])\n\nFind the optimal path to the target within the same room and move to it.\n\nArguments:\n* x - X position of the target in the same room.\n* y - Y position of the target in the same room.\n* target - Can be a RoomPosition object or any object containing RoomPosition. The position doesn't have to be in the same room.\n* opts (optional) - An object containing pathfinding options flags (see Room.findPath for more info) or one of the following:\n  - reusePath - This option enables reusing the path found along multiple game ticks. It allows to save CPU time, but can result in a slightly slower creep reaction behavior. The path is stored into the creep's memory to the _move property. The reusePath value defines the amount of ticks which the path should be reused for. The default value is 5. Increase the amount to save more CPU, decrease to make the movement more consistent. Set to 0 if you want to disable path reusing.\n  - serializeMemory - If reusePath is enabled and this option is set to true, the path will be stored in memory in the short serialized form using Room.serializePath. The default value is true.\n  - noPathFinding - If this option is set to true, moveTo method will return ERR_NOT_FOUND if there is no memorized path to reuse. This can significantly save CPU time in some cases. The default value is false.\n  - visualizePathStyle - draw a line along the creep’s path using RoomVisual.poly. You can provide either an empty object or custom style parameters.\n\nCPU cost: HIGH",
+                "!type": "fn(arg1: ?, arg2?: ?, arg3?: ?) -> number"
+            },
+            my: {
+                "!type": "bool",
+                "!doc": "Whether it is your power creep or foe."
+            },
+            name: {
+                "!doc": "Power creep's name. You can choose the name while creating a new power creep, and it cannot be changed later. This name is a hash key to access the creep via the `Game.powerCreeps` object.",
+                "!type": "string"
+            },
+            notifyWhenAttacked: {
+                "!doc": "Toggle auto notification when the power creep is under attack. The notification will be sent to your account email. Turned on by default.\n\nArguments:\n* enabled - Whether to enable notification or disable.\n\nCPU cost: CONST",
+                "!type": "fn(enabled: bool) -> number"
+            },
+            owner: {
+                "!doc": "An object with the owner info",
+                username: {
+                    "!doc": "The name of the owner user.",
+                    "!type": "string"
+                }
+            },
+            pickup: {
+                "!doc": "Pick up an item (a dropped piece of energy). The target has to be at adjacent square to the creep or at the same square.\n\nArguments:\n* target - The target object to be picked up.\n\nCPU cost: CONST",
+                "!type": "fn(target: +Resource) -> number"
+            },
+            rename: {
+                "!doc": "Rename the power creep. It must not be spawned in the world.\n\nArguments:\n* name - The new name of the power creep.\n\nCPU cost: NONE",
+                "!type": "fn(name: string) -> number"
+            },
+            renew: {
+                "!doc": "Instantly restore time to live to the maximum using a Power Spawn or a Power Bank nearby.\n\nArguments:\n* target - The target structure\n\nCPU cost: CONST",
+                "!type": "fn(target: object) -> number"
+            },
+            powers: {
+                "!doc": "Available powers, an object with power ID as a key",
+                "!type": "[+Power]"
+            },
+            say: {
+                "!doc": "Display a visual speech balloon above the power creep with the specified message. The message will be available for one tick. You can read the last message using the `saying` property.\n\nArguments:\n* message - The message to be displayed. Maximum length is 10 characters.\n* public (optional) - Set to true to allow other players to see this message. Default is false.\n\nCPU cost: NONE",
+                "!type": "fn(message: string, public?: boolean) -> number"
+            },
+            saying: {
+                "!doc": "The text message that the power creep was saying at the last tick.",
+                "!type": "string"
+            },
+            shard: {
+                "!doc": "The name of the shard where the power creep is spawned, or undefined.",
+                "!type": "string"
+            },
+            spawn: {
+                "!doc": "Spawn this power creep in the specified Power Spawn.\n\nArguments:\n* powerSpawn - Your Power Spawn structure.\n\nCPU cost: CONST",
+                "!type": "fn(powerSpawn: +StructurePowerSpawn) -> number"
+            },
+            spawnCooldownTime: {
+                "!doc": "The timestamp when spawning or deleting this creep will become available. Undefined if the power creep is spawned in the world.",
+                "!type": "number"
+            },
+            suicide: {
+                "!doc": "Kill the power creep immediately. It will not be destroyed permanently, but will become unspawned, so that you can spawn it again.\n\nCPU cost: CONST",
+                "!type": "fn() -> number"
+            },
+            ticksToLive: {
+                "!doc": "The remaining amount of game ticks after which the creep will die and become unspawned. Undefined if the creep is not spawned in the world.",
+                "!type": "number"
+            },
+            transfer: {
+                "!doc": "Transfer resource from the power creep to another power creep, creep, or structure. The target has to be at adjacent square to the power creep.\n\nArguments:\n* target - The target object.\n* resourceType - One of the RESOURCE_* constants.\n* amount (optional) - The amount of resources to be transferred. If omitted, all the available carried amount is used.\n\nCPU cost: CONST",
+                "!type": "fn(target: object, resourceType: string, amount?: number) -> number"
+            },
+            upgrade: {
+                "!doc": "Upgrade the creep, adding a new power ability to it or increasing level of the existing power. You need one free Power Level in your account to perform this action.\n\nArguments:\n* power - The power ability to upgrade, one of the PWR_* constants.\n\nCPU cost: CONST",
+                "!type": "fn(power: number) -> number"
+            },
+            usePower: {
+                "!doc": "Apply one the creep's powers on the specified target. You can only use powers in rooms either without a controller, or with a power-enabled controller. Only one power can be used during the same tick, each usePower call will override the previous one. If the target has the same effect of a lower or equal level, it is overridden. If the existing effect level is higher, an error is returned.\n\nArguments:\n* power - The power ability to use, one of the PWR_* constants.\n* target - A target object in the room.\n\nCPU cost: CONST",
+                "!type": "fn(power: number, target?: +RoomObject) -> number"
+            },
+            withdraw: {
+                "!doc": "Withdraw resources from a structure, tombstone, or ruin. The target has to be at adjacent square to the power creep. Your power creeps can withdraw resources from hostile structures as well, in case if there is no hostile rampart on top of it.\n\nArguments:\n* target - The target object.\n* resourceType - One of the RESOURCE_* constants.\n* amount (optional) - The amount of resources to be transferred. If omitted, all the available amount is used.\n\nCPU cost: CONST",
+                "!type": "fn(target: +Structure, resourceType: string, amount?: number) -> number"
+            },
         })
     },
     Resource: {
@@ -1373,6 +1523,10 @@ _extend(def_screeps, {
         creeps: {
             "!doc": "A hash containing all your creeps with creep names as hash keys.",
             "!type": "[+Creep]"
+        },
+        powerCreeps: {
+            "!doc": "A hash containing all your Power Creeps with their names as hash keys.",
+            "!type": "[+PowerCreep]"
         },
         flags: {
             "!doc": "A hash containing all your flags with flag names as hash keys.",
