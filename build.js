@@ -1547,6 +1547,21 @@ _extend(def_screeps, {
                 "!type": "number"
             }
         },
+        gpl: {
+            "!doc": "Your Global Power Level, an object with the following properties:",
+            level: {
+                "!doc": "The current level.",
+                "!type": "number"
+            },
+            progress: {
+                "!doc": "The current progress to the next level.",
+                "!type": "number"
+            },
+            progressTotal: {
+                "!doc": "The progress required to reach the next level.",
+                "!type": "number"
+            }
+        },
         market: {
             "!doc": "A global object representing the in-game market. You can use this object to track resource transactions to/from your terminals, and your buy/sell orders.",
             incomingTransactions: {
