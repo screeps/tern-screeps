@@ -161,6 +161,12 @@ var def_screeps = {
         PathfindingOptions: _docs.pathfindingOptions,
         RoomFindPathOptions: _docs.roomFindPathOptions,
         MoveToOptions: _docs.moveToOptions,
+        FindRouteOptions: {
+            routeCallback: {
+                "!doc": "This callback accepts two arguments: function(roomName, fromRoomName). It can be used to calculate the cost of entering that room. You can use this to do things like prioritize your own rooms, or avoid some rooms. You can return a floating point cost or Infinity to block the room.",
+                "!type": "fn(roomName: string, fromRoomName: string) -> number"
+            }
+        },
         LookItem: {
             type: "string",
             creep: "+Creep",
@@ -1904,7 +1910,7 @@ _extend(def_screeps, {
             },
             findRoute: {
                 "!doc": "Find route from the given room to another room.\n\nArguments:\n* fromRoom - Start room name or room object.\n* toRoom - Finish room name or room object.\n* opts - An object with the following options:\n  - routeCallback - This callback accepts two arguments: function(roomName, fromRoomName). It can be used to calculate the cost of entering that room. You can use this to do things like prioritize your own rooms, or avoid some rooms. You can return a floating point cost or Infinity to block the room.\n\nCPU cost: HIGH",
-                "!type": "fn(fromRoom: ?, toRoom: ?) -> [MapRouteStep]"
+                "!type": "fn(fromRoom: ?, toRoom: ?, opts?: +FindRouteOptions) -> [MapRouteStep]"
             },
             isRoomProtected: {
                 "!doc": "Check if the room with the given name is protected by temporary \"newbie\" walls.\n\nArguments:\n* roomName - The room name.\n\nCPU cost: AVERAGE",
