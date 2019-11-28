@@ -11,6 +11,16 @@ function _extend() {
     return dst;
 }
 
+
+var _docs = {
+    store: {
+        store: {
+            "!doc": "A Store object that contains cargo of this creep.",
+            "!type": "+Store"
+        }
+    }
+};
+
 var def_screeps = {
     "!name": "screeps",
     "!define": {
@@ -213,6 +223,109 @@ var def_screeps = {
                 "!type": "number"
             }
         },
+        LineStyle: {
+            width: {
+                "!doc": "Line width, default is 0.1.",
+                "!type": "number"
+            },
+            color: {
+                "!doc": "Line color in any web format, default is #ffffff (white).",
+                "!type": "string"
+            },
+            opacity: {
+                "!doc": "Opacity value, default is 0.5.",
+                "!type": "number"
+            },
+            lineStyle: {
+                "!doc": "Either undefined (solid line), dashed, or dotted. Default is undefined.",
+                "!type": "string"
+            }
+        },
+        CircleStyle: {
+            radius: {
+                "!doc": "Circle radius, default is 0.15.",
+                "!type": "number"
+            },
+            fill: {
+                "!doc": "Fill color in any web format, default is #ffffff (white).",
+                "!type": "string"
+            },
+            opacity: {
+                "!doc": "Opacity value, default is 0.5.",
+                "!type": "number"
+            },
+            stroke: {
+                "!doc": "Stroke color in any web format, default is undefined (no stroke).",
+                "!type": "string"
+            },
+            strokeWidth: {
+                "!doc": "Stroke line width, default is 0.1.",
+                "!type": "number"
+            },
+            lineStyle: {
+                "!doc": "Either undefined (solid line), dashed, or dotted. Default is undefined.",
+                "!type": "string"
+            }
+        },
+        PolyStyle: {
+            fill: {
+                "!doc": "Fill color in any web format, default is #ffffff (white).",
+                "!type": "string"
+            },
+            opacity: {
+                "!doc": "Opacity value, default is 0.5.",
+                "!type": "number"
+            },
+            stroke: {
+                "!doc": "Stroke color in any web format, default is undefined (no stroke).",
+                "!type": "string"
+            },
+            strokeWidth: {
+                "!doc": "Stroke line width, default is 0.1.",
+                "!type": "number"
+            },
+            lineStyle: {
+                "!doc": "Either undefined (solid line), dashed, or dotted. Default is undefined.",
+                "!type": "string"
+            }
+        },
+        TextStyle: {
+            color: {
+                "!doc": "Font color in any web format, default is #ffffff (white).",
+                "!type": "string"
+            },
+            font: {
+                "!doc": "Either a number or a string in one of the following forms:\n" +
+                    "0.7 - relative size in game coordinates\n" +
+                    "20px - absolute size in pixels\n" +
+                    "0.7 serif\n" +
+                    "bold italic 1.5 Times New Roman"
+            },
+            stroke: {
+                "!doc": "Stroke color in any web format, default is undefined (no stroke).",
+                "!type": "string"
+            },
+            strokeWidth: {
+                "!doc": "Stroke line width, default is 0.1.",
+                "!type": "number"
+            },
+            backgroundColor: {
+                "!doc": "Background color in any web format, default is undefined (no background). When background is enabled, text vertical align is set to middle (default is baseline).",
+                "!type": "string"
+            },
+            backgroundPadding: {
+                "!doc": "Background rectangle padding, default is 0.3.",
+                "!type": "number"
+            },
+            align: {
+                "!doc": "Text align, either center, left, or right. Default is center.",
+                "!type": "string"
+            },
+            opacity: {
+                "!doc": "Opacity value, default is 1.0.",
+                "!type": "number"
+            }
+        }
     },
     RoomObject: {
         "!type": "fn()",
@@ -289,7 +402,6 @@ _extend(def_screeps, {
     },
 });
 
-
 _extend(def_screeps, {
     OwnedStructure: {
         "!type": "fn()",
@@ -309,15 +421,6 @@ _extend(def_screeps, {
         })
     },
 });
-
-var _docs = {
-    store: {
-        store: {
-            "!doc": "A Store object that contains cargo of this creep.",
-            "!type": "+Store"
-        }
-    }
-};
 
 _extend(def_screeps, {
     ConstructionSite: {
@@ -1198,7 +1301,7 @@ _extend(def_screeps, {
         "!doc": "Contains powerful methods for pathfinding in the game world. Support exists for custom navigation costs and paths which span multiple rooms. Additionally PathFinder can search for paths through rooms you can't see, although you won't be able to detect any dynamic obstacles like creeps or buildings.\n\nThis module is experimental and disabled by default. Run `PathFinder.use(true)` to enable it in the game methods.",
         search: {
             "!doc": "Find an optimal path between origin and goal.\n\nArguments:\n* origin - The start position.\n* goal - A goal or an array of goals. If more than one goal is supplied then the cheapest path found out of all the goals will be returned. A goal is either a RoomPosition or an object as defined below. Important: Please note that if your goal is not walkable (for instance, a source) then you should set range to at least 1 or else you will waste many CPU cycles searching for a target that you can't walk on.\n  - pos - The target.\n  - range - Range to pos before goal is considered reached. The default is 0.\n\n* opts (optional) - An object containing additional pathfinding flags.\n  - roomCallback - Request from the pathfinder to generate a CostMatrix for a certain room. The callback accepts one argument, roomName. This callback will only be called once per room per search. If you are running multiple pathfinding operations in a single room and in a single tick you may consider caching your CostMatrix to speed up your code. Please read the CostMatrix documentation below for more information on CostMatrix.\n  - plainCost - Cost for walking on plain positions. The default is 1.\n  - swampCost - Cost for walking on swamp positions. The default is 5.\n  - flee - Instead of searching for a path to the goals this will search for a path away from the goals. The cheapest path that is out of range of every goal will be returned. The default is false.\n  - maxOps - The maximum allowed pathfinding operations. You can limit CPU time used for the search based on ratio 1 op ~ 0.001 CPU. The default value is 2000.\n  - maxCost - The maximum allowed cost of the path returned. If at any point the pathfinder detects that it is impossible to find a path with a cost less than or equal to `maxCost` it will immediately halt the search. The default is Infinity.\n  - maxRooms - The maximum allowed rooms to search. The default (and maximum) is 16.\n  - heuristicWeight - Weight to apply to the heuristic in the A* formula F = G + weight * H. Use this option only if you understand the underlying A* algorithm mechanics! The default value is 1.2.\n\nReturn value\n\nAn object containing:\n* path - An array of RoomPosition objects.\n* ops - Total number of operations performed before this path was calculated.",
-            "!type": "fn(origin: +RoomPosition, goal: ?, opts?: object) -> object"
+            "!type": "fn(origin: +RoomPosition, goal: ?, opts?: +PathfindingOptions) -> object"
         },
         use: {
             "!doc": "Specify whether to use this new experimental pathfinder in game objects methods. This method should be invoked every tick. It affects the following methods behavior: Room.findPath, RoomPosition.findPathTo, RoomPosition.findClosestByPath, Creep.moveTo.",
@@ -1403,23 +1506,23 @@ _extend(def_screeps, {
         },
         line: {
             "!doc": "Syntax:\nline(x1, y1, x2, y2, [style])\nline(pos1, pos2, [style])\n\nDraw a line.\n\nArguments:\n* x1 - The start X coordinate.\n* y1 - The start Y coordinate.\n* x2 - The finish X coordinate.\n* y2 - The finish Y coordinate.\n* pos1 - The start position object.\n* pos2 - The finish position object.\n* style (optional) - An object with the following properties:\n  - width - Line width, default is 0.1.\n  - color - Line color in any web format, default is #ffffff (white).\n  - opacity - Opacity value, default is 0.5.\n  - lineStyle - Either undefined (solid line), dashed, or dotted. Default is undefined.",
-            "!type": "fn(x1: number, y1: number, x2: number, y2: number, style?: object) -> +RoomVisual"
+            "!type": "fn(x1: number, y1: number, x2: number, y2: number, style?: +LineStyle) -> +RoomVisual"
         },
         circle: {
             "!doc": "Syntax:\ncircle(x, y, [style])\ncircle(pos, [style])\n\nDraw a circle.\n\nArguments:\n* x - The X coordinate of the center.\n* y - The Y coordinate of the center.\n* pos - The position object of the center.\n* style (optional) - An object with the following properties:\n  - radius - Circle radius, default is 0.15.\n  - fill - Fill color in any web format, default is #ffffff (white).\n  - opacity - Opacity value, default is 0.5.\n  - stroke - Stroke color in any web format, default is undefined (no stroke).\n  - strokeWidth - Stroke line width, default is 0.1.\n  - lineStyle - Either undefined (solid line), 'dashed', or 'dotted'. Default is undefined.",
-            "!type": "fn(x: number, y: number, style?: object) -> +RoomVisual"
+            "!type": "fn(x: number, y: number, style?: +CircleStyle) -> +RoomVisual"
         },
         rect: {
             "!doc": "Syntax:\nrect(x, y, width, height, [style])\nrect(topLeftPos, width, height, [style])\n\nDraw a rectangle.\n\nArguments:\n* x - The X coordinate of the top-left corner.\n* y - The Y coordinate of the top-left corner.\n* topLeftPos - The position object of the top-left corner.\n* width - The width of the rectangle.\n* height - The height of the rectangle.\n* style (optional) - An object with the following properties:\n  - fill - Fill color in any web format, default is #ffffff (white).\n  - opacity - Opacity value, default is 0.5.\n  - stroke - Stroke color in any web format, default is undefined (no stroke).\n  - strokeWidth - Stroke line width, default is 0.1.\n  - lineStyle - Either undefined (solid line), 'dashed', or 'dotted'. Default is undefined.",
-            "!type": "fn(x: number, y: number, width: number, height: number, style?: object) -> +RoomVisual"
+            "!type": "fn(x: number, y: number, width: number, height: number, style?: +PolyStyle) -> +RoomVisual"
         },
         poly: {
             "!doc": "Draw a polyline.\n\nArguments:\n* points - An array of points. Every item should be either an array with 2 numbers (i.e. [10,15]), or a RoomPosition object.\n* style (optional) - An object with the following properties:\n  - fill - Fill color in any web format, default is undefined (no fill).\n  - opacity - Opacity value, default is 0.5.\n  - stroke - Stroke color in any web format, default is #ffffff (white).\n  - strokeWidth - Stroke line width, default is 0.1.\n  - lineStyle - Either undefined (solid line), 'dashed', or 'dotted'. Default is undefined.",
-            "!type": "fn(points: [object], style?: object) -> +RoomVisual"
+            "!type": "fn(points: [object], style?: +PolyStyle) -> +RoomVisual"
         },
         text: {
             "!doc": "Syntax:\ntext(text, x, y, [style])\ntext(text, pos, [style])\n\nDraw a text label.\n\nArguments:\n* text - The text message.\n* x - The X coordinate of the label baseline point.\n* y - The Y coordinate of the label baseline point.\n* pos - The position object of the label baseline.\n* style (optional) - An object with the following properties:\n  - color - Font color in any web format, default is #ffffff (white).\n  - font - Either a number or a string.\n  - stroke - Stroke color in any web format, default is undefined (no stroke).\n  - strokeWidth - Stroke width, default is 0.15.\n  - background - Background color in any web format, default is undefined (no background). When background is enabled, text vertical align is set to middle (default is baseline).\n  - backgroundPadding - Background rectangle padding, default is 0.3.\n  - align - Text align, either 'center', 'left', or 'right'. Default is 'center'.\n  - opacity - Opacity value, default is 1.0.",
-            "!type": "fn(x: number, y: number, width: number, height: number, style?: object) -> +RoomVisual"
+            "!type": "fn(x: number, y: number, width: number, height: number, style?: +TextStyle) -> +RoomVisual"
         },
         clear: {
             "!doc": "Remove all visuals from the room.",
