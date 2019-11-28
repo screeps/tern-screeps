@@ -1509,21 +1509,6 @@ _extend(def_screeps, {
                 "!doc": "The Terminal structure of this room, if present, otherwise undefined.",
                 "!type": "+StructureTerminal"
             },
-            survivalInfo: {
-                "!doc": "An object with survival game info if available.",
-                score: {
-                    "!doc": "Current score",
-                    "!type": "number"
-                },
-                timeToWave: {
-                    "!doc": "Time to the next wave of invaders.",
-                    "!type": "number"
-                },
-                wave: {
-                    "!doc": "The number of the next wave.",
-                    "!type": "number"
-                }
-            },
             createConstructionSite: {
                 "!doc": "Syntax:\ncreateConstructionSite(x, y, structureType, [name])\ncreateConstructionSite(pos, structureType, [name])\n\nCreate new ConstructionSite at the specified location.\n\nArguments:\n* x - The X position.\n* y - The Y position.\n* pos - Can be a RoomPosition object or any object containing RoomPosition.\n* structureType - One of the STRUCTURE_* constants.\n* name (optional) - The name of the structure, for structures that support it (currently only spawns).\n\nCPU cost: CONST",
                 "!type": "fn(arg1: ?, arg2: ?, arg3?: ?, arg4?: ?) -> number"
