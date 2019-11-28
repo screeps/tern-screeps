@@ -1482,6 +1482,21 @@ _extend(def_screeps, {
     Memory: {
         "!doc": "The global object Memory in which you may store any information in the JSON format."
     },
+    InterShardMemory: {
+        "!doc": "InterShardMemory object provides an interface for communicating between shards.\n\nEvery shard can have its own 100 KB of data in string format that can be accessed by all other shards. A shard can write only to its own data, other shards' data is read-only.\n\nThis data has nothing to do with Memory contents, it's a separate data container.",
+        getLocal: {
+            "!doc": "Returns the string contents of the current shard's data.",
+            "!type": "fn() -> string"
+        },
+        setLocal: {
+            "!doc": "Replace the current shard's data with the new value.\n\nArguments:\n* value - New data value in string format.\n",
+            "!type": "fn(value: string)"
+        },
+        getRemote: {
+            "!doc": "Returns the string contents of another shard's data.\n\nArguments:\n* shard - Shard name.\n",
+            "!type": "fn(shard: string) -> string"
+        }
+    },
     Game: {
         "!doc": "The main global game object containing all the gameplay information.",
         cpu: {
