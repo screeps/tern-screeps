@@ -875,7 +875,11 @@ _extend(def_screeps, {
                 "!doc": "Withdraw resources from a structure, tombstone, or ruin. The target has to be at adjacent square to the power creep. Your power creeps can withdraw resources from hostile structures as well, in case if there is no hostile rampart on top of it.\n\nArguments:\n* target - The target object.\n* resourceType - One of the RESOURCE_* constants.\n* amount (optional) - The amount of resources to be transferred. If omitted, all the available amount is used.\n\nCPU cost: CONST",
                 "!type": "fn(target: +Structure, resourceType: string, amount?: number) -> number"
             },
-        })
+        }),
+        create: {
+            "!doc": "A static method to create new Power Creep instance in your account. It will be added in an unspawned state, use spawn method to spawn it in the world.\nYou need one free Power Level in your account to perform this action.\n\nArguments:\n* name - The name of the new power creep.\n* className - The class of the new power creep, one of the POWER_CLASS constants.\n\nCPU cost: CONST",
+            "!type": "fn(name: string, className: string) -> number"
+        }
     },
     Resource: {
         "!type": "fn()",
