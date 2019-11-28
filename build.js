@@ -902,6 +902,24 @@ _extend(def_screeps, {
             }
         })
     },
+    Nuke: {
+        "!type": "fn()",
+        "!doc": "",
+        prototype: _extend({}, def_screeps.RoomObject.prototype, {
+            id: {
+                "!type": "string",
+                "!doc": "A unique object identificator. You can use `Game.getObjectById` method to retrieve an object instance by its `id`.",
+            },
+            launchRoomName: {
+                "!type": "string",
+                "!doc": "The name of the room where this nuke has been launched from.",
+            },
+            timeToLand: {
+                "!type": "number",
+                "!doc": "The remaining landing time.",
+            }
+        })
+    },
 
     StructureContainer: {
         "!type": "fn()",
