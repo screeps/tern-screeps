@@ -91,6 +91,27 @@ _extend(_docs, {
     })
 });
 
+_extend(_docs, {
+    moveToOptions: _extend({}, _docs.roomFindPathOptions, {
+        reusePath: {
+            "!doc": "This option enables reusing the path found along multiple game ticks. It allows to save CPU time, but can result in a slightly slower creep reaction behavior. The path is stored into the creep's memory to the _move property. The reusePath value defines the amount of ticks which the path should be reused for. The default value is 5. Increase the amount to save more CPU, decrease to make the movement more consistent. Set to 0 if you want to disable path reusing.",
+            "!type": "boolean"
+        },
+        serializeMemory: {
+            "!doc": "If reusePath is enabled and this option is set to true, the path will be stored in memory in the short serialized form using Room.serializePath. The default value is true.",
+            "!type": "boolean"
+        },
+        noPathFinding: {
+            "!doc": "If this option is set to true, moveTo method will return ERR_NOT_FOUND if there is no memorized path to reuse. This can significantly save CPU time in some cases. The default value is false.",
+            "!type": "boolean"
+        },
+        visualizePathStyle: {
+            "!doc": "Draw a line along the creep’s path using RoomVisual.poly. You can provide either an empty object or custom style parameters.",
+            "!type": "object"
+        }
+    })
+});
+
 var def_screeps = {
     "!name": "screeps",
     "!define": {
@@ -139,6 +160,7 @@ var def_screeps = {
         },
         PathfindingOptions: _docs.pathfindingOptions,
         RoomFindPathOptions: _docs.roomFindPathOptions,
+        MoveToOptions: _docs.moveToOptions,
         LookItem: {
             type: "string",
             creep: "+Creep",
