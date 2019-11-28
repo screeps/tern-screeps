@@ -879,6 +879,10 @@ _extend(def_screeps, {
         "!type": "fn()",
         "!doc": "Claim this structure to take control over the room. The controller structure cannot be damaged or destroyed. It can be addressed by Room.controller property.",
         prototype: _extend({}, def_screeps.OwnedStructure.prototype, {
+            isPowerEnabled: {
+                "!doc": "Whether using power is enabled in this room. Use PowerCreep.enableRoom to turn powers on.",
+                "!type": "number"
+            },
             level: {
                 "!doc": "Current controller level, from 0 to 8.",
                 "!type": "number"
@@ -900,6 +904,25 @@ _extend(def_screeps, {
                 ticksToEnd: {
                     "!doc": "The amount of game ticks when the reservation will end.",
                     "!type": "number"
+                }
+            },
+            sign: {
+                "!doc": "An object with the controller sign info if present.",
+                username: {
+                    "!doc": "The name of a player who signed this controller.",
+                    "!type": "string"
+                },
+                text: {
+                    "!doc": "The sign text.",
+                    "!type": "string"
+                },
+                time: {
+                    "!doc": "The sign time in game ticks.",
+                    "!type": "number"
+                },
+                datetime: {
+                    "!doc": "The sign real date.",
+                    "!type": "Date"
                 }
             },
             ticksToDowngrade: {
