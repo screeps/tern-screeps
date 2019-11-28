@@ -119,6 +119,24 @@ var def_screeps = {
         Path: {
             "!type": "[PathStep]"
         },
+        PathfindingResult: {
+            path: {
+                "!doc": "An array of RoomPosition objects.",
+                "!type": "[+RoomPosition]"
+            },
+            ops: {
+                "!doc": "Total number of operations performed before this path was calculated.",
+                "!type": "number"
+            },
+            cost: {
+                "!doc": "The total cost of the path as derived from plainCost, swampCost and any given CostMatrix instances.",
+                "!type": "number"
+            },
+            incomplete: {
+                "!doc": "If the pathfinder fails to find a complete path, this will be true. Note that path will still be populated with a partial path which represents the closest path it could find given the search parameters.",
+                "!type": "boolean"
+            }
+        },
         PathfindingOptions: _docs.pathfindingOptions,
         RoomFindPathOptions: _docs.roomFindPathOptions,
         LookItem: {
@@ -1414,7 +1432,7 @@ _extend(def_screeps, {
         "!doc": "Contains powerful methods for pathfinding in the game world. Support exists for custom navigation costs and paths which span multiple rooms. Additionally PathFinder can search for paths through rooms you can't see, although you won't be able to detect any dynamic obstacles like creeps or buildings.\n\nThis module is experimental and disabled by default. Run `PathFinder.use(true)` to enable it in the game methods.",
         search: {
             "!doc": "Find an optimal path between origin and goal.\n\nArguments:\n* origin - The start position.\n* goal - A goal or an array of goals. If more than one goal is supplied then the cheapest path found out of all the goals will be returned. A goal is either a RoomPosition or an object as defined below. Important: Please note that if your goal is not walkable (for instance, a source) then you should set range to at least 1 or else you will waste many CPU cycles searching for a target that you can't walk on.\n  - pos - The target.\n  - range - Range to pos before goal is considered reached. The default is 0.\n\n* opts (optional) - An object containing additional pathfinding flags.\n  - roomCallback - Request from the pathfinder to generate a CostMatrix for a certain room. The callback accepts one argument, roomName. This callback will only be called once per room per search. If you are running multiple pathfinding operations in a single room and in a single tick you may consider caching your CostMatrix to speed up your code. Please read the CostMatrix documentation below for more information on CostMatrix.\n  - plainCost - Cost for walking on plain positions. The default is 1.\n  - swampCost - Cost for walking on swamp positions. The default is 5.\n  - flee - Instead of searching for a path to the goals this will search for a path away from the goals. The cheapest path that is out of range of every goal will be returned. The default is false.\n  - maxOps - The maximum allowed pathfinding operations. You can limit CPU time used for the search based on ratio 1 op ~ 0.001 CPU. The default value is 2000.\n  - maxCost - The maximum allowed cost of the path returned. If at any point the pathfinder detects that it is impossible to find a path with a cost less than or equal to `maxCost` it will immediately halt the search. The default is Infinity.\n  - maxRooms - The maximum allowed rooms to search. The default (and maximum) is 16.\n  - heuristicWeight - Weight to apply to the heuristic in the A* formula F = G + weight * H. Use this option only if you understand the underlying A* algorithm mechanics! The default value is 1.2.\n\nReturn value\n\nAn object containing:\n* path - An array of RoomPosition objects.\n* ops - Total number of operations performed before this path was calculated.",
-            "!type": "fn(origin: +RoomPosition, goal: ?, opts?: +PathfindingOptions) -> object"
+            "!type": "fn(origin: +RoomPosition, goal: ?, opts?: +PathfindingOptions) -> +PathfindingResult"
         },
         use: {
             "!doc": "Specify whether to use this new experimental pathfinder in game objects methods. This method should be invoked every tick. It affects the following methods behavior: Room.findPath, RoomPosition.findPathTo, RoomPosition.findClosestByPath, Creep.moveTo.",
