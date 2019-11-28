@@ -1199,11 +1199,7 @@ _extend(def_screeps, {
             processPower: {
                 "!doc": "Register power resource units into your account. Registered power allows to develop power creeps skills. Consumes 1 power resource unit and 50 energy resource units.\n\nCPU cost: CONST",
                 "!type": "fn() -> number"
-            },
-            createPowerCreep: {
-                "!doc": "Create a power creep. This method is under development.\n\nArguments:\n* name - The power creep name.\n\nCPU cost: CONST",
-                "!type": "fn(name: string) -> number"
-            },
+            }
         })
     },
     StructureRampart: {
