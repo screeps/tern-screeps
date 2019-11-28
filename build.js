@@ -21,6 +21,43 @@ var _docs = {
     }
 };
 
+_extend(_docs, {
+    pathfindingOptions:  {
+        roomCallback: {
+            "!doc": "Request from the pathfinder to generate a CostMatrix for a certain room. The callback accepts one argument, roomName. This callback will only be called once per room per search. If you are running multiple pathfinding operations in a single room and in a single tick you may consider caching your CostMatrix to speed up your code. Please read the CostMatrix documentation below for more information on CostMatrix. If you return false from the callback the requested room will not be searched, and it won't count against maxRooms",
+            "!type": "fn(roomName: string) -> +CostMatrix"
+        },
+        plainCost: {
+            "!doc": "Cost for walking on plain positions. The default is 1.",
+            "!type": "number"
+        },
+        swampCost: {
+            "!doc": "Cost for walking on swamp positions. The default is 5.",
+            "!type": "number"
+        },
+        flee: {
+            "!doc": "Instead of searching for a path to the goals this will search for a path away from the goals. The cheapest path that is out of range of every goal will be returned. The default is false.",
+            "!type": "bool"
+        },
+        maxOps: {
+            "!doc": "The maximum allowed pathfinding operations. You can limit CPU time used for the search based on ratio 1 op ~ 0.001 CPU. The default value is 2000.",
+            "!type": "number"
+        },
+        maxRooms: {
+            "!doc": "The maximum allowed rooms to search. The default is 16, maximum is 64.",
+            "!type": "number"
+        },
+        maxCost: {
+            "!doc": "The maximum allowed cost of the path returned. If at any point the pathfinder detects that it is impossible to find a path with a cost less than or equal to maxCost it will immediately halt the search. The default is Infinity.",
+            "!type": "number"
+        },
+        heuristicWeight: {
+            "!doc": "Weight to apply to the heuristic in the A* formula F = G + weight * H. Use this option only if you understand the underlying A* algorithm mechanics! The default value is 1.",
+            "!type": "number"
+        }
+    }
+});
+
 var def_screeps = {
     "!name": "screeps",
     "!define": {
@@ -49,6 +86,7 @@ var def_screeps = {
         Path: {
             "!type": "[PathStep]"
         },
+        PathfindingOptions: _docs.pathfindingOptions,
         LookItem: {
             type: "string",
             creep: "+Creep",
