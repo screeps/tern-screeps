@@ -832,7 +832,7 @@ _extend(def_screeps, {
                 "!doc": "The total amount of energy in the source. Equals to 3000 in most cases.",
                 "!type": "number"
             },
-            ticksToRenegeration: {
+            ticksToRegeneration: {
                 "!doc": "The remaining time after which the source will be refilled.",
                 "!type": "number"
             }
@@ -854,7 +854,7 @@ _extend(def_screeps, {
                 "!doc": "The resource type, one of the RESOURCE_* constants.",
                 "!type": "string"
             },
-            ticksToRenegeration: {
+            ticksToRegeneration: {
                 "!doc": "The remaining time after which the deposit will be refilled.",
                 "!type": "number"
             },
