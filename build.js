@@ -341,6 +341,16 @@ var def_screeps = {
                 "!type": "number"
             }
         },
+        RoomStatus: {
+            status: {
+                "!doc": "One of the following string values:\n* normal &ndash; the room has no restrictions\n* closed &ndash; the room is not available\n* novice &ndash; the room is part of a novice area\n* respawn &ndash; the room is part of a respawn area",
+                "!type": "string"
+            },
+            timestamp: {
+                "!doc": "Status expiration time in milliseconds since UNIX epoch time. This property is null if the status is permanent.",
+                "!type": "number"
+            },
+        },
         LineStyle: {
             width: {
                 "!doc": "Line width, default is 0.1.",
@@ -1869,9 +1879,9 @@ _extend(def_screeps, {
                 "!doc": "Find route from the given room to another room.\n\nArguments:\n* fromRoom - Start room name or room object.\n* toRoom - Finish room name or room object.\n* opts - An object with the following options:\n  - routeCallback - This callback accepts two arguments: function(roomName, fromRoomName). It can be used to calculate the cost of entering that room. You can use this to do things like prioritize your own rooms, or avoid some rooms. You can return a floating point cost or Infinity to block the room.\n\nCPU cost: HIGH",
                 "!type": "fn(fromRoom: ?, toRoom: ?, opts?: +FindRouteOptions) -> [MapRouteStep]"
             },
-            isRoomProtected: {
-                "!doc": "Check if the room with the given name is protected by temporary \"newbie\" walls.\n\nArguments:\n* roomName - The room name.\n\nCPU cost: AVERAGE",
-                "!type": "fn(roomName: string) -> bool"
+            getRoomStatus: {
+                "!doc": "Returns status of the room with the given name (whether the room in a protected area or not) \n\nArguments:\n* roomName - The room name.\n\nCPU cost: LOW",
+                "!type": "fn(roomName: string) -> +RoomStatus"
             },
             getRoomLinearDistance: {
                 "!doc": "Get linear distance (in rooms) between two rooms. You can use this function to estimate the energy cost of sending resources through terminals, or using observers and nukes. \n\nArguments:\n* roomName1 - The name of the first room.\n* roomName2 - The name of the second room.\n* continuous (optional) - Whether to treat the world map continuous on borders. Set to true if you want to calculate the terminal send or trade fee.\n\nCPU cost: NONE",
