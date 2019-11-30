@@ -1188,14 +1188,6 @@ _extend(def_screeps, {
         "!type": "fn()",
         "!doc": "Processes power into your account, and spawns power creeps with special unique powers (in development).",
         prototype: _extend({}, _docs.store, def_screeps.OwnedStructure.prototype, {
-            power: {
-                "!doc": "The amount of power containing.",
-                "!type": "number"
-            },
-            powerCapacity: {
-                "!doc": "The total amount of power this structure can contain.",
-                "!type": "number"
-            },
             processPower: {
                 "!doc": "Register power resource units into your account. Registered power allows to develop power creeps skills. Consumes 1 power resource unit and 50 energy resource units.\n\nCPU cost: CONST",
                 "!type": "fn() -> number"
@@ -1305,14 +1297,6 @@ _extend(def_screeps, {
             spawning: {
                 "!doc": "If the spawn is in process of spawning a new creep, this object will contain the new creep’s information, or null otherwise.",
                 "!type": "+StructureSpawnSpawning"
-            },
-            canCreateCreep: {
-                "!doc": "Check if a creep can be created.\n\nArguments:\n* body - An array describing the new creep’s body. Should contain 1 to 50 elements with one of the body part constants.\n* name (optional) - The name of a new creep. It should be unique creep name, i.e. the Game.creeps object should not contain another creep with the same name (hash key). If not defined, a random name will be generated.\n\nCPU cost: AVERAGE",
-                "!type": "fn(body: [string], name?: string) -> bool"
-            },
-            createCreep: {
-                "!doc": "This method is deprecated and will be removed soon. Please use StructureSpawn.spawnCreep instead.\n\nStart the creep spawning process. The required energy amount can be withdrawn from all spawns and extensions in the room.\n\nArguments:\n* body - An array describing the new creep’s body. Should contain 1 to 50 elements with one of the body part constants.\n* name (optional) - The name of a new creep. It should be unique creep name, i.e. the Game.creeps object should not contain another creep with the same name (hash key). If not defined, a random name will be generated.\n* memory (optional) - The memory of a new creep. If provided, it will be immediately stored into Memory.creeps[name].\n\nCPU cost: CONST",
-                "!type": "fn(body: [string], name?: string, memory?: ?) -> number"
             },
             spawnCreep: {
                 "!doc": "Start the creep spawning process. The required energy amount can be withdrawn from all spawns and extensions in the room.\n\nArguments:\n* body - An array describing the new creep’s body. Should contain 1 to 50 elements with one of the body part constants.\n* name - The name of a new creep. It should be unique creep name, i.e. the Game.creeps object should not contain another creep with the same name (hash key).\n* opts (optional) - An object with following properties:\n  - memory - The memory of a new creep. If provided, it will be immediately stored into Memory.creeps[name].\n  - energyStructures - Array of spawns/extensions from which to draw energy for the spawning process.\n  - dryRun - If dryRun is true, the operation will only check if it is possible to create a creep.\n  - directions - Set desired directions where the creep should move when spawned. An array with the direction constants.\n\nCPU cost: CONST",
@@ -1462,10 +1446,6 @@ _extend(def_screeps, {
             "!doc": "Find an optimal path between origin and goal.\n\nArguments:\n* origin - The start position.\n* goal - A goal or an array of goals. If more than one goal is supplied then the cheapest path found out of all the goals will be returned. A goal is either a RoomPosition or an object as defined below. Important: Please note that if your goal is not walkable (for instance, a source) then you should set range to at least 1 or else you will waste many CPU cycles searching for a target that you can't walk on.\n  - pos - The target.\n  - range - Range to pos before goal is considered reached. The default is 0.\n\n* opts (optional) - An object containing additional pathfinding flags.\n  - roomCallback - Request from the pathfinder to generate a CostMatrix for a certain room. The callback accepts one argument, roomName. This callback will only be called once per room per search. If you are running multiple pathfinding operations in a single room and in a single tick you may consider caching your CostMatrix to speed up your code. Please read the CostMatrix documentation below for more information on CostMatrix.\n  - plainCost - Cost for walking on plain positions. The default is 1.\n  - swampCost - Cost for walking on swamp positions. The default is 5.\n  - flee - Instead of searching for a path to the goals this will search for a path away from the goals. The cheapest path that is out of range of every goal will be returned. The default is false.\n  - maxOps - The maximum allowed pathfinding operations. You can limit CPU time used for the search based on ratio 1 op ~ 0.001 CPU. The default value is 2000.\n  - maxCost - The maximum allowed cost of the path returned. If at any point the pathfinder detects that it is impossible to find a path with a cost less than or equal to `maxCost` it will immediately halt the search. The default is Infinity.\n  - maxRooms - The maximum allowed rooms to search. The default (and maximum) is 16.\n  - heuristicWeight - Weight to apply to the heuristic in the A* formula F = G + weight * H. Use this option only if you understand the underlying A* algorithm mechanics! The default value is 1.2.\n\nReturn value\n\nAn object containing:\n* path - An array of RoomPosition objects.\n* ops - Total number of operations performed before this path was calculated.",
             "!type": "fn(origin: +RoomPosition, goal: ?, opts?: +PathfindingOptions) -> +PathfindingResult"
         },
-        use: {
-            "!doc": "Specify whether to use this new experimental pathfinder in game objects methods. This method should be invoked every tick. It affects the following methods behavior: Room.findPath, RoomPosition.findPathTo, RoomPosition.findClosestByPath, Creep.moveTo.",
-            "!type": "fn(isEnabled: bool)"
-        },
         CostMatrix: {
             "!type": "CostMatrix"
         }
@@ -1483,7 +1463,7 @@ _extend(def_screeps, {
                 "!type": "number"
             },
             energyCapacityAvailable: {
-                "!doc": "Total amount of energyCapacity of all spawns and extensions in the room.",
+                "!doc": "Total amount of energy capacity of all spawns and extensions in the room.",
                 "!type": "number"
             },
             memory: {
@@ -1720,10 +1700,6 @@ _extend(def_screeps, {
         setPublicSegments: {
             "!doc": "Set specified segments as public. Other users will be able to request access to them using setActiveForeignSegment.\n\nArguments:\n* ids - An array of segment IDs. Each ID should be a number from 0 to 99. Subsequent calls of setPublicSegments override previous ones.",
             "!type": "fn(ids: [number])"
-        },
-        interShardSegment: {
-            "!doc": "A string with a shared memory segment available on every world shard. Maximum string length is 100 KB.\n\nWarning: this segment is not safe for concurrent usage! All shards have shared access to the same instance of data. When the segment contents is changed by two shards simultaneously, you may lose some data, since the segment string value is written all at once atomically. You must implement your own system to determine when each shard is allowed to rewrite the inter-shard memory, e.g. based on mutual exclusions.",
-            "!type": "string"
         }
     },
     Memory: {
@@ -1896,10 +1872,6 @@ _extend(def_screeps, {
             isRoomProtected: {
                 "!doc": "Check if the room with the given name is protected by temporary \"newbie\" walls.\n\nArguments:\n* roomName - The room name.\n\nCPU cost: AVERAGE",
                 "!type": "fn(roomName: string) -> bool"
-            },
-            getTerrainAt: {
-                "!doc": "Syntax:\ngetTerrainAt(x, y, roomName)\ngetTerrainAt(pos)\n\nGet terrain type at the specified room position. This method works for any room in the world even if you have no access to it.\n\nArguments:\n* x - X position in the room.\n* y - Y position in the room.\n* roomName - The room name\n* pos - The position object\n\nCPU cost: LOW",
-                "!type": "fn(arg1: ?, arg2?: ?, arg3?: ?) -> string"
             },
             getRoomLinearDistance: {
                 "!doc": "Get linear distance (in rooms) between two rooms. You can use this function to estimate the energy cost of sending resources through terminals, or using observers and nukes. \n\nArguments:\n* roomName1 - The name of the first room.\n* roomName2 - The name of the second room.\n* continuous (optional) - Whether to treat the world map continuous on borders. Set to true if you want to calculate the terminal send or trade fee.\n\nCPU cost: NONE",
