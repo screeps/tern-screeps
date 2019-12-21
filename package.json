@@ -1,6 +1,6 @@
 {
   "name": "tern-screeps",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "ternjs definitions for Screeps",
   "main": "defs/screeps.json",
   "scripts": {
