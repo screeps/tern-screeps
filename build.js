@@ -1746,6 +1746,14 @@ _extend(def_screeps, {
                 "!doc": "An amount of unused CPU accumulated in your bucket.",
                 "!type": "number"
             },
+            unlocked: {
+                "!doc": "Whether full CPU is currently unlocked for your account.",
+                "!type": "bool"
+            },
+            unlockedTime: {
+                "!doc": "The time in milliseconds since UNIX epoch time until full CPU is unlocked for your account. This property is not defined when full CPU is not unlocked for your account or it's unlocked with a subscription.",
+                "!type": "number"
+            },
             getUsed: {
                 "!doc": "Get amount of CPU time used from the beginning of the current game tick. Always returns 0 in the Simulation mode.\n\nCPU cost: LOW",
                 "!type": "fn() -> number"
@@ -1760,6 +1768,18 @@ _extend(def_screeps, {
             getHeapStatistics: {
                 "!doc": "Use this method to get heap statistics for your virtual machine. The return value is almost identical to the Node.js function v8.getHeapStatistics(). This function returns one additional property: externally_allocated_size which is the total amount of currently allocated memory which is not included in the v8 heap but counts against this isolate's memory limit. ArrayBuffer instances over a certain size are externally allocated and will be counted here.",
                 "!type": "fn() -> +HeapStatistics"
+            },
+            halt: {
+                "!doc": "Reset your runtime environment and wipe all data in heap memory.",
+                "!type": "fn()"
+            },
+            generatePixel: {
+                "!doc": "Generate 1 pixel resource unit for 5000 CPU from your bucket.\n\nCPU cost: HIGH",
+                "!type": "fn() -> number"
+            },
+            unlock: {
+                "!doc": "Unlock full CPU for your account for additional 24 hours.\n\nCPU cost: CONST",
+                "!type": "fn() -> number"
             }
         },
 
@@ -1897,7 +1917,7 @@ _extend(def_screeps, {
             }
         },
         resources: {
-            "!doc": "An object with your global resources that are bound to the account, like subscription tokens. Each object key is a resource constant, values are resources amounts.",
+            "!doc": "An object with your global resources that are bound to the account, like pixels or CPU unlocks. Each object key is a resource constant, values are resources amounts.",
         },
         rooms: {
             "!doc": "A hash containing all the rooms available to you with room names as hash keys. A room is visible if you have a creep or an owned structure in it.",
