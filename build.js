@@ -369,6 +369,24 @@ var def_screeps = {
                 "!type": "string"
             }
         },
+        MapLineStyle: {
+            width: {
+                "!doc": "Line width, default is 0.5.",
+                "!type": "number"
+            },
+            color: {
+                "!doc": "Line color in any web format, default is #ffffff (white).",
+                "!type": "string"
+            },
+            opacity: {
+                "!doc": "Opacity value, default is 0.5.",
+                "!type": "number"
+            },
+            lineStyle: {
+                "!doc": "Either undefined (solid line), dashed, or dotted. Default is undefined.",
+                "!type": "string"
+            }
+        },
         CircleStyle: {
             radius: {
                 "!doc": "Circle radius, default is 0.15.",
@@ -395,6 +413,32 @@ var def_screeps = {
                 "!type": "string"
             }
         },
+        MapCircleStyle: {
+            radius: {
+                "!doc": "Circle radius, default is 10.",
+                "!type": "number"
+            },
+            fill: {
+                "!doc": "Fill color in the following format: #ffffff (hex triplet). Default is #ffffff.",
+                "!type": "string"
+            },
+            opacity: {
+                "!doc": "Opacity value, default is 0.5.",
+                "!type": "number"
+            },
+            stroke: {
+                "!doc": "Stroke color in the following format: #ffffff (hex triplet). Default is undefined (no stroke).",
+                "!type": "string"
+            },
+            strokeWidth: {
+                "!doc": "Stroke line width, default is 0.5.",
+                "!type": "number"
+            },
+            lineStyle: {
+                "!doc": "Either undefined (solid line), dashed, or dotted. Default is undefined.",
+                "!type": "string"
+            }
+        },
         PolyStyle: {
             fill: {
                 "!doc": "Fill color in any web format, default is #ffffff (white).",
@@ -410,6 +454,50 @@ var def_screeps = {
             },
             strokeWidth: {
                 "!doc": "Stroke line width, default is 0.1.",
+                "!type": "number"
+            },
+            lineStyle: {
+                "!doc": "Either undefined (solid line), dashed, or dotted. Default is undefined.",
+                "!type": "string"
+            }
+        },
+        MapRectStyle: {
+            fill: {
+                "!doc": "Fill color in the following format: #ffffff (hex triplet). Default is #ffffff.",
+                "!type": "string"
+            },
+            opacity: {
+                "!doc": "Opacity value, default is 0.5.",
+                "!type": "number"
+            },
+            stroke: {
+                "!doc": "Stroke color in the following format: #ffffff (hex triplet). Default is undefined (no stroke).",
+                "!type": "string"
+            },
+            strokeWidth: {
+                "!doc": "Stroke line width, default is 0.5.",
+                "!type": "number"
+            },
+            lineStyle: {
+                "!doc": "Either undefined (solid line), dashed, or dotted. Default is undefined.",
+                "!type": "string"
+            }
+        },
+        MapPolyStyle: {
+            fill: {
+                "!doc": "Fill color in the following format: #ffffff (hex triplet). Default is #ffffff.",
+                "!type": "string"
+            },
+            opacity: {
+                "!doc": "Opacity value, default is 0.5.",
+                "!type": "number"
+            },
+            stroke: {
+                "!doc": "Stroke color in the following format: #ffffff (hex triplet). Default is #ffffff.",
+                "!type": "string"
+            },
+            strokeWidth: {
+                "!doc": "Stroke line width, default is 0.5.",
                 "!type": "number"
             },
             lineStyle: {
@@ -451,6 +539,52 @@ var def_screeps = {
             },
             opacity: {
                 "!doc": "Opacity value, default is 1.0.",
+                "!type": "number"
+            }
+        },
+        MapTextStyle: {
+            color: {
+                "!doc": "Font color in the following format: #ffffff (hex triplet). Default is #ffffff.",
+                "!type": "string"
+            },
+            fontFamily: {
+                "!doc": "The font family, default is sans-serif",
+                "!type": "string"
+            },
+            fontSize: {
+                "!doc": "The font size in game coordinates, default is 10",
+                "!type": "number"
+            },
+            fontStyle: {
+                "!doc": "The font style ('normal', 'italic' or 'oblique')",
+                "!type": "string"
+            },
+            fontVariant: {
+                "!doc": "The font variant ('normal' or 'small-caps')",
+                "!type": "string"
+            },
+            stroke: {
+                "!doc": "Stroke color in the following format: #ffffff (hex triplet). Default is undefined (no stroke).",
+                "!type": "string"
+            },
+            strokeWidth: {
+                "!doc": "Stroke line width, default is 0.15.",
+                "!type": "number"
+            },
+            backgroundColor: {
+                "!doc": "Background color in the following format: #ffffff (hex triplet). Default is undefined (no background). When background is enabled, text vertical align is set to middle (default is baseline).",
+                "!type": "string"
+            },
+            backgroundPadding: {
+                "!doc": "Background rectangle padding, default is 2.",
+                "!type": "number"
+            },
+            align: {
+                "!doc": "Text align, either center, left, or right. Default is center.",
+                "!type": "string"
+            },
+            opacity: {
+                "!doc": "Opacity value, default is 0.5.",
                 "!type": "number"
             }
         }
@@ -1656,7 +1790,7 @@ _extend(def_screeps, {
         },
         text: {
             "!doc": "Syntax:\ntext(text, x, y, [style])\ntext(text, pos, [style])\n\nDraw a text label.\n\nArguments:\n* text - The text message.\n* x - The X coordinate of the label baseline point.\n* y - The Y coordinate of the label baseline point.\n* pos - The position object of the label baseline.\n* style (optional) - An object with the following properties:\n  - color - Font color in any web format, default is #ffffff (white).\n  - font - Either a number or a string.\n  - stroke - Stroke color in any web format, default is undefined (no stroke).\n  - strokeWidth - Stroke width, default is 0.15.\n  - background - Background color in any web format, default is undefined (no background). When background is enabled, text vertical align is set to middle (default is baseline).\n  - backgroundPadding - Background rectangle padding, default is 0.3.\n  - align - Text align, either 'center', 'left', or 'right'. Default is 'center'.\n  - opacity - Opacity value, default is 1.0.",
-            "!type": "fn(x: number, y: number, width: number, height: number, style?: +TextStyle) -> +RoomVisual"
+            "!type": "fn(text: string, x: number, y: number, style?: +TextStyle) -> +RoomVisual"
         },
         clear: {
             "!doc": "Remove all visuals from the room.",
@@ -1665,6 +1799,53 @@ _extend(def_screeps, {
         getSize: {
             "!doc": "Get the stored size of all visuals added in the room in the current tick. It must not exceed 512,000 (500 KB).",
             "!type": "fn() -> number"
+        },
+        import: {
+            "!doc": "Syntax:\nimport(value)\n\nAdd previously exported room visuals to the room visual data of the current tick.\n\nArguments:\n*value - The string with visuals data",
+            "!type": "fn(string) -> +RoomVisual"
+        },
+        export: {
+            "!doc": "Returns a compact representation of all visuals added in the room in the current tick.",
+            "!type": "fn() -> string"
+        }
+    },
+    MapVisual: {
+        "!doc": "Map visuals provide a way to show various visual debug info on the game map. You can use the Game.map.visual object to draw simple shapes that are visible only to you.",
+        line: {
+            "!doc": "Syntax:\nline(pos1, pos2, [style])\n\nDraw a line.\n\nArguments:\n* pos1 - The start position object.\n* pos2 - The finish position object.\n* style (optional) - An object with the following properties:\n  - width - Line width, default is 0.5.\n  - color - Line color in the following format: #ffffff (hex triplet).\n  - opacity - Opacity value, default is 0.5.\n  - lineStyle - Either undefined (solid line), dashed, or dotted. Default is undefined.",
+            "!type": "fn(pos1: +RoomPosition, pos2: +RoomPosition, style?: +MapLineStyle) -> +MapVisual"
+        },
+        circle: {
+            "!doc": "Syntax:\ncircle(pos, [style])\n\nDraw a circle.\n\nArguments:\n* pos - The position object of the center.\n* style (optional) - An object with the following properties:\n  - radius - Circle radius, default is 10.\n  - fill - Fill color in the following format: #ffffff (hex triplet). Default is #ffffff.\n  - opacity - Opacity value, default is 0.5.\n  - stroke - Stroke color in the following format: #ffffff (hex triplet). Default is undefined (no stroke).\n  - strokeWidth - Stroke line width, default is 0.5.\n  - lineStyle - Either undefined (solid line), 'dashed', or 'dotted'. Default is undefined.",
+            "!type": "fn(pos: +RoomPosition, style?: +MapCircleStyle) -> +MapVisual"
+        },
+        rect: {
+            "!doc": "Syntax:\nrect(topLeftPos, width, height, [style])\n\nDraw a rectangle.\n\nArguments:\n* topLeftPos - The position object of the top-left corner.\n* width - The width of the rectangle.\n* height - The height of the rectangle.\n* style (optional) - An object with the following properties:\n  - fill - Fill color in the following format: #ffffff (hex triplet). Default is #ffffff.\n  - opacity - Opacity value, default is 0.5.\n  - stroke - Stroke color in the following format: #ffffff (hex triplet). Default is undefined (no stroke).\n  - strokeWidth - Stroke line width, default is 0.5.\n  - lineStyle - Either undefined (solid line), 'dashed', or 'dotted'. Default is undefined.",
+            "!type": "fn(topLeftPos: +RoomPosition, width: number, height: number, style?: +MapRectStyle) -> +MapVisual"
+        },
+        poly: {
+            "!doc": "Draw a polyline.\n\nArguments:\n* points - An array of points. Every item should be a RoomPosition object.\n* style (optional) - An object with the following properties:\n  - fill - Fill color in the following format: #ffffff (hex triplet). Default is #ffffff.\n  - opacity - Opacity value, default is 0.5.\n  - stroke - Stroke color in the following format: #ffffff (hex triplet). Default is #ffffff.\n  - strokeWidth - Stroke line width, default is 0.5.\n  - lineStyle - Either undefined (solid line), 'dashed', or 'dotted'. Default is undefined.",
+            "!type": "fn(points: [+RoomPosition], style?: +MapPolyStyle) -> +MapVisual"
+        },
+        text: {
+            "!doc": "Syntax:\ntext(text, pos, [style])\n\nDraw a text label.\n\nArguments:\n* text - The text message.\n* pos - The position object of the label baseline.\n* style (optional) - An object with the following properties:\n  - color - Font color in the following format: #ffffff (hex triplet). Default is #ffffff.\n  - fontFamily - The font family, default is sans-serif.\n  - fontSize - The font size in game coordinates, default is 10.\n  - fontStyle - The font style ('normal', 'italic' or 'oblique').\n  - The font variant ('normal' or 'small-caps').\n  - stroke - Stroke color in the following format: #ffffff (hex triplet). Default is undefined (no stroke).\n  - strokeWidth - Stroke width, default is 0.15.\n  - background - Background color in any web format, default is undefined (no background). When background is enabled, text vertical align is set to middle (default is baseline).\n  - backgroundPadding - Background rectangle padding, default is 2.\n  - align - Text align, either 'center', 'left', or 'right'. Default is 'center'.\n  - opacity - Opacity value, default is 0.5.",
+            "!type": "fn(text: string, pos: +RoomPosition, style?: +MapTextStyle) -> +RoomVisual"
+        },
+        clear: {
+            "!doc": "Remove all visuals from the map.",
+            "!type": "fn() -> +MapVisual"
+        },
+        getSize: {
+            "!doc": "Get the stored size of all visuals added on the map in the current tick. It must not exceed 1024,000 (1000 KB).",
+            "!type": "fn() -> number"
+        },
+        import: {
+            "!doc": "Syntax:\nimport(value)\n\nAdd previously exported map visuals to the map visual data of the current tick.\n\nArguments:\n*value - The string with visuals data",
+            "!type": "fn(string) -> +MapVisual"
+        },
+        export: {
+            "!doc": "Returns a compact representation of all visuals added on the map in the current tick.",
+            "!type": "fn() -> string"
         }
     },
     RawMemory: {
@@ -1914,6 +2095,10 @@ _extend(def_screeps, {
             getRoomTerrain: {
                 "!doc": "Get a Room.Terrain object which provides fast access to static terrain data. This method works for any room in the world even if you have no access to it.\n\nArguments:\n* roomName - The room name\n\nCPU Cost: LOW",
                 "!type": "fn(roomName: string) -> +RoomTerrain"
+            },
+            visual: {
+                "!doc": "A MapVisual object for the map of the current shard. You can use this object to draw simple shapes (lines, circles, text labels) on the map.",
+                "!type": "+MapVisual"
             }
         },
         resources: {
