@@ -1955,7 +1955,7 @@ _extend(def_screeps, {
                 "!type": "fn()"
             },
             generatePixel: {
-                "!doc": "Generate 1 pixel resource unit for 5000 CPU from your bucket.\n\nCPU cost: HIGH",
+                "!doc": "Generate 1 pixel resource unit for 10000 CPU from your bucket.\n\nCPU cost: HIGH",
                 "!type": "fn() -> number"
             },
             unlock: {
